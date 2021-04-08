@@ -1,14 +1,15 @@
-Game(10, 10, 10);
+Game(7, 7, 7);
 
 
 function Game(width, height, numOfMines) {
     const gameBoard = document.getElementById('gameBoard');
     const rows = [];
-    let safeCellCount = width * height - numOfMines;
+
 
     function initGame(width, height, numOfMines) {
 
         const mineSet = cellMineInit(width * height, numOfMines);
+        let safeNum;
         console.log(mineSet);
 
         for (let i = 0; i < height; i++) {
@@ -40,15 +41,32 @@ function Game(width, height, numOfMines) {
                     // console.log(cell.x, cell.y);
 
                     const neighbors = getNeighbors(cell);
-                    // console.log(neighbors);
+                     console.log(neighbors);
 
-                    safeCellCount -= 1;
-                    cell.dom.textContent = neighbors.filter(neighbor => neighbor.isMine === true).length;
+
+
+                    let cellMineNum = neighbors.filter(neighbor => neighbor.isMine === true).length;
+
+                    cell.dom.textContent = cellMineNum;
+
+                    if(cellMineNum===0){
+                        for(let i=0; i<neighbors.length; i++){
+                            neighbors[i].dom.click();
+                        }
+                        cell.dom.style.color="gray";
+                    }
+
+
 
                     cell.clicked = true;
-                    if (safeCellCount <= 0) {
+
+                    safeNum = safeCount();
+                    console.log(safeNum);
+                    if (safeNum <= 0) {
                         setTimeout(() => { return gameOver(true) }, 100);
                     }
+
+
 
                 });
 
@@ -67,14 +85,27 @@ function Game(width, height, numOfMines) {
 
                 });
 
-
-
                 if (mineSet.includes(i * 10 + j)) {
                     cell.isMine = true;
                 }
 
                 row.push(cell);
             }
+
+
+        }
+
+
+
+
+        function safeCount(){
+            let safeNum=width*height-numOfMines;
+            for(let i=0; i<height; i++){
+                for(let j=0; j<width; j++){
+                    if(rows[i][j].clicked==true) safeNum--;
+                }
+            }
+            return safeNum;
         }
 
 
