@@ -10,24 +10,45 @@
 
 
 <body>
-    <div>
-        <h1>MineSweeper</h1>
-        <!-- <form id="initForm">
-            <input type="number" placeholder="row" name="row">
-            <input type="number" placeholder="column" name="col">
-            <input type="number" placeholder="# of mine" name="numOfMines">
+    <div class="fullFrame">
+        <h1>&#128163; MineSweeper &#128163;</h1>
+        <form id="initForm">
+            <div>
+                높 이 : <input type="number" class="formInput" name="row">
+            </div>
+            <div>
+                너 비 : <input type="number" class="formInput" name="col">
+            </div>
+            <div>
+                지 뢰 : <input type="number" class="formInput" name="numOfMines">
+            </div>
 
-            <input type="submit" value="입력">
-        </form> -->
-        <!-- <form id="refreshForm">
-            <input type="button" value="refresh" onClick="window.location.reload()">
-        </form> -->
-        <div id="mineCounter">
 
+            <input type="submit" value="Start">
+        </form>
+
+        <input type="button" value="restart" id='restart'>
+
+
+        <input type="button" value="remap" id="remap" onClick="window.location.reload()">
+
+        <div id="displayBar">
+            <div id="playTimer">
+                <div id="timeTitle">
+                    <B>PLAY TIME</B>
+                </div>
+                <div id="currTime"></div>
+            </div>
+            <div id="mineCounter">
+                <div id="cellOpened"></div>
+                <div id="leftMine"></div>
+            </div>
         </div>
+
         <div id="gameBoard">
 
         </div>
+
     </div>
 
 </body>

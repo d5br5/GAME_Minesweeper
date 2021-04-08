@@ -1,16 +1,116 @@
-Game(7, 7, 7);
+const initDom = document.querySelector('#initForm');
 
+const remapDom = document.getElementById('remap');
+const displayBarDom = document.getElementById('displayBar');
+const playTimerDOM = document.getElementById('playTimer');
+const currTimeDom = document.getElementById('currTime');
+const restartDom = document.getElementById("restart");
+
+let initFormShow = true;
+
+let width;
+let height;
+let numOfMines;
+
+initDom.addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    width = initDom.querySelector("[name='col'").value;
+    height = initDom.querySelector("[name='row']").value;
+    numOfMines = initDom.querySelector("[name='numOfMines']").value;
+
+    if (width < 5 || width > 30 || height < 5 || height > 30 || numOfMines < 0 || numOfMines > width * height) {
+        alert("올바르지 않은 숫자입니다. \n행과 열 각각 5 ~ 30 로 입력가능합니다.");
+        window.location.reload();
+        return;
+    }
+
+    initFormDisplayChange();
+
+    Game(width, height, numOfMines);
+
+});
+
+
+function initFormDisplayChange() {
+    if (initFormShow) {
+        initFormShow = false;
+        initDom.style.display = "none";
+        restartDom.style.display = "inline-block";
+        remapDom.style.display = "initial";
+        displayBarDom.style.display = "flex"
+    } else {
+        initFormShow = true;
+        initDom.style.display = "initial";
+        restartDom.style.display = "none";
+        remapDom.style.display = "none";
+        displayBarDom.style.display = "none"
+    }
+}
 
 function Game(width, height, numOfMines) {
     const gameBoard = document.getElementById('gameBoard');
+    gameBoard.style.display = "inline-block";
+
+    let totalPlay;
+    let playHour = 0;
+    let playSec = 0;
+    let playMin = 0;
+
+    totalPlay = ("0" + playMin).slice(-2) + "m : " + ("0" + playSec).slice(-2) + "s";
+    currTimeDom.textContent = totalPlay;
+
     const rows = [];
 
+    const timeStart = setInterval(() => {
+        playSec++;
+        if (playSec >= 60) {
+            playSec = 0;
+            playMin++;
+        }
+        if (playMin >= 60) {
+            playMin = 0;
+            playHour++;
+        }
+
+        if (playHour > 0) {
+            totalPlay = ("0" + playHour).slice(-2) + "h : " + totalPlay;
+        } else {
+            totalPlay = ("0" + playMin).slice(-2) + "m : " + ("0" + playSec).slice(-2) + "s";
+        }
+
+        currTimeDom.textContent = totalPlay;
+    }, 1000);
+
+    function cellMineInit(mapSize, numOfMines) {
+        let mineAlloc = [];
+        for (let i = 0; i < numOfMines; i++) {
+            let num = Math.floor(Math.random() * mapSize);
+            if (!mineAlloc.includes(num)) {
+                mineAlloc.push(num);
+            } else {
+                i--;
+            }
+        }
+        return mineAlloc;
+    }
 
     function initGame(width, height, numOfMines) {
 
         const mineSet = cellMineInit(width * height, numOfMines);
-        let safeNum;
-        console.log(mineSet);
+        let safeNum = width * height - numOfMines;
+        //let safeNum = safeCount();
+        let leftMine = numOfMines;
+
+        const cellOpenedDom = document.getElementById('cellOpened');
+        const leftMineDom = document.getElementById('leftMine');
+
+        cellOpenedDom.textContent = "안전한 셀 : " + safeNum;
+        leftMineDom.textContent = "남은 지뢰 : " + leftMine;
+
+        //console.log(mineSet);
+
 
         for (let i = 0; i < height; i++) {
             const row = [];
@@ -35,28 +135,27 @@ function Game(width, height, numOfMines) {
                     isMine: false
                 }
 
-                dom.addEventListener('click', function() {
+                dom.addEventListener('click', function() { //cell left click, open or die
                     if (cell.clicked || cell.marked) return;
                     if (cell.isMine) return gameOver(false);
-                    // console.log(cell.x, cell.y);
 
                     const neighbors = getNeighbors(cell);
-                     console.log(neighbors);
-
-
 
                     let cellMineNum = neighbors.filter(neighbor => neighbor.isMine === true).length;
 
                     cell.dom.textContent = cellMineNum;
+                    cell.dom.style.backgroundColor = 'white';
 
-                    if(cellMineNum===0){
-                        for(let i=0; i<neighbors.length; i++){
-                            neighbors[i].dom.click();
+
+                    if (cellMineNum === 0) {
+                        for (let i = 0; i < neighbors.length; i++) {
+                            if (neighbors[i].clicked === false) {
+                                neighbors[i].dom.click();
+                            }
+
                         }
-                        cell.dom.style.color="gray";
+                        cell.dom.style.color = "gray";
                     }
-
-
 
                     cell.clicked = true;
 
@@ -66,43 +165,40 @@ function Game(width, height, numOfMines) {
                         setTimeout(() => { return gameOver(true) }, 100);
                     }
 
-
+                    cellOpenedDom.textContent = "안전한 셀 : " + safeNum;
 
                 });
 
-                dom.addEventListener('contextmenu', function(e) {
+                dom.addEventListener('contextmenu', function(e) { // cell right click, flag
                     e.preventDefault();
 
                     if (cell.clicked) return;
                     if (cell.marked) {
                         cell.marked = false;
                         cell.dom.textContent = "";
+                        leftMine++;
                     } else {
                         cell.marked = true;
-                        cell.dom.textContent = "★";
+                        cell.dom.textContent = "🚩";
+                        leftMine--;
                     }
-                    return;
 
+                    leftMineDom.textContent = "남은 지뢰 : " + leftMine;
+                    return;
                 });
 
-                if (mineSet.includes(i * 10 + j)) {
+                if (mineSet.includes(i * width + j)) {
                     cell.isMine = true;
                 }
-
                 row.push(cell);
             }
-
-
         }
 
-
-
-
-        function safeCount(){
-            let safeNum=width*height-numOfMines;
-            for(let i=0; i<height; i++){
-                for(let j=0; j<width; j++){
-                    if(rows[i][j].clicked==true) safeNum--;
+        function safeCount() {
+            let safeNum = width * height - numOfMines;
+            for (let i = 0; i < height; i++) {
+                for (let j = 0; j < width; j++) {
+                    if (rows[i][j].clicked == true) safeNum--;
                 }
             }
             return safeNum;
@@ -113,6 +209,7 @@ function Game(width, height, numOfMines) {
     }
 
     initGame(width, height, numOfMines);
+
 
 
     function getNeighbors(cell) {
@@ -134,68 +231,14 @@ function Game(width, height, numOfMines) {
 
     function gameOver(isWin) {
         if (isWin) {
-            alert('C O N G R A T U L A T I O N \nG A M E  C L E A R !!');
+            alert(`CONGRATULATION\nG A M E  C L E A R !!\nRecord : [${totalPlay}]`);
             window.location.reload();
+            clearInterval(timeStart);
         } else {
             alert('Baaaaaannnnnng~~ \nR E G A M E!');
             window.location.reload();
         }
 
-
     }
 
-}
-
-
-// const initDom = document.querySelector('#initForm');
-// let initshow = true;
-
-// const refreshDom = document.getElementById('refreshForm');
-
-// initDom.addEventListener('submit', function(e) {
-//     e.preventDefault();
-
-//     const width = initDom.querySelector("[name='col'").value;
-//     const height = initDom.querySelector("[name='row']").value;
-//     const numOfMines = initDom.querySelector("[name='numOfMines']").value;
-
-//     if (width <= 0 || width > 30 || height <= 0 || height > 30 || numOfMines < 0 || numOfMines > width * height) {
-//         alert("올바르지 않은 숫자입니다. \n 행과 열은 최대 30까지 가능합니다.");
-//         window.location.reload();
-//         return;
-//     }
-
-//     initFormDisplayChange();
-
-//     Game(width, height, numOfMines);
-
-
-
-
-// });
-
-// function initFormDisplayChange() {
-//     if (initshow) {
-//         initshow = false;
-//         initDom.style.display = "none";
-//         refreshDom.style.display = "initial";
-//     } else {
-//         initshow = true;
-//         initDom.style.display = "initial";
-//         refreshDom.style.display = "none";
-//     }
-
-// }
-
-function cellMineInit(mapSize, numOfMines) {
-    let mineAlloc = [];
-    for (let i = 0; i < numOfMines; i++) {
-        let num = Math.floor(Math.random() * mapSize);
-        if (!mineAlloc.includes(num)) {
-            mineAlloc.push(num);
-        } else {
-            i--;
-        }
-    }
-    return mineAlloc;
 }

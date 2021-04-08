@@ -1,22 +1,102 @@
+.fullFrame {
+    margin: 80px auto;
+    text-align: center;
+}
+
 h1 {
     color: deeppink;
+}
+
+#displayBar {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px 0;
 }
 
 .row {
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 
 .cell {
     border: 1px solid black;
     padding: 3px;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     text-align: center;
-    line-height: 30px;
-    color:deeppink;
+    line-height: 25px;
+    color: deeppink;
+    background-color: slateblue;
 }
 
-#refreshForm {
+input[type="button"],
+input[type="submit"] {
+    width: 80px;
+    height: 40px;
+    margin: 10px auto;
+}
+
+.formInput {
+    width: 60px;
+    height: 30px;
+    margin: 10px auto;
+}
+
+#initForm {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+#gameBoard {
+    margin: 0 auto;
+    padding: 0;
+    border: 1px solid black;
     display: none;
+}
+
+#restart,
+#remap {
+    display: none;
+    margin: 10px 20px;
+}
+
+#playTimer {
+    width: 120px;
+    border: 2px solid black;
+    border-radius: 7px;
+    padding: 15px 60px;
+    margin: 0 10px;
+}
+
+#currTime {
+    border: 1px solid black;
+    border-radius: 7px;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#mineCounter {
+    margin: 0 10px;
+    border: 2px solid black;
+    border-radius: 7px;
+    padding: 0 50px;
+}
+
+#cellOpened {
+    width: 140px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#leftMine {
+    width: 140px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    text-align: center;
 }
