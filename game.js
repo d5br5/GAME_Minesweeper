@@ -1,10 +1,11 @@
 const initDom = document.querySelector('#initForm');
-
 const remapDom = document.getElementById('remap');
+const restartDom = document.getElementById("restart");
+
 const displayBarDom = document.getElementById('displayBar');
 const playTimerDOM = document.getElementById('playTimer');
 const currTimeDom = document.getElementById('currTime');
-const restartDom = document.getElementById("restart");
+
 
 let initFormShow = true;
 
@@ -100,7 +101,6 @@ function Game(width, height, numOfMines) {
 
         const mineSet = cellMineInit(width * height, numOfMines);
         let safeNum = width * height - numOfMines;
-        //let safeNum = safeCount();
         let leftMine = numOfMines;
 
         const cellOpenedDom = document.getElementById('cellOpened');
@@ -109,8 +109,7 @@ function Game(width, height, numOfMines) {
         cellOpenedDom.textContent = "안전한 셀 : " + safeNum;
         leftMineDom.textContent = "남은 지뢰 : " + leftMine;
 
-        //console.log(mineSet);
-
+        let toBeOpened = [];
 
         for (let i = 0; i < height; i++) {
             const row = [];
@@ -146,14 +145,8 @@ function Game(width, height, numOfMines) {
                     cell.dom.textContent = cellMineNum;
                     cell.dom.style.backgroundColor = 'white';
 
-
                     if (cellMineNum === 0) {
-                        for (let i = 0; i < neighbors.length; i++) {
-                            if (neighbors[i].clicked === false) {
-                                neighbors[i].dom.click();
-                            }
-
-                        }
+                        openAllZero(cell);
                         cell.dom.style.color = "gray";
                     }
 
@@ -187,6 +180,18 @@ function Game(width, height, numOfMines) {
                     return;
                 });
 
+                dom.addEventListener('mouseover', function() {
+                    if (!cell.clicked) {
+                        cell.dom.style.backgroundColor = "#02FF00";
+                    }
+                })
+
+                dom.addEventListener('mouseout', function() {
+                    if (!cell.clicked) {
+                        cell.dom.style.backgroundColor = "slateblue";
+                    }
+                })
+
                 if (mineSet.includes(i * width + j)) {
                     cell.isMine = true;
                 }
@@ -204,8 +209,12 @@ function Game(width, height, numOfMines) {
             return safeNum;
         }
 
-
-
+        async function openAllZero(startCell) {
+            getNeighbors(startCell).forEach(item => { if (item.clicked === false) toBeOpened.push(item) });
+            while (toBeOpened.length) {
+                await toBeOpened.pop().dom.click();
+            }
+        }
     }
 
     initGame(width, height, numOfMines);
@@ -236,9 +245,24 @@ function Game(width, height, numOfMines) {
             clearInterval(timeStart);
         } else {
             alert('Baaaaaannnnnng~~ \nR E G A M E!');
-            window.location.reload();
+            // window.location.reload();
+            restartGame();
         }
-
     }
+
+    function restartGame() {
+        gameBoard.remove();
+
+        const dom = document.createElement('div');
+        dom.setAttribute("id", "gameBoard");
+
+        const fullFrameDom = document.getElementById('fullFrame');
+        fullFrameDom.appendChild(dom);
+
+        clearInterval(timeStart);
+        Game(width, height, numOfMines);
+    }
+
+    restartDom.addEventListener("click", restartGame);
 
 }
