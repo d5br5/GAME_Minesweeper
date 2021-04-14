@@ -87,14 +87,14 @@ input[type="submit"] {
     padding: 0 50px;
 }
 
-#cellOpened {
+#openedCellCount {
     width: 140px;
     padding-top: 20px;
     padding-bottom: 10px;
     text-align: center;
 }
 
-#leftMine {
+#leftMineCount {
     width: 140px;
     padding-top: 10px;
     padding-bottom: 20px;

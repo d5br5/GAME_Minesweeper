@@ -1,11 +1,9 @@
-const initDom = document.querySelector('#initForm');
+const initDom = document.getElementById('initForm');
 const remapDom = document.getElementById('remap');
-const restartDom = document.getElementById("restart");
+const restartDom = document.getElementById('restart');
 
 const displayBarDom = document.getElementById('displayBar');
-const playTimerDOM = document.getElementById('playTimer');
 const currTimeDom = document.getElementById('currTime');
-
 
 let initFormShow = true;
 
@@ -22,7 +20,7 @@ initDom.addEventListener('submit', function(e) {
     numOfMines = initDom.querySelector("[name='numOfMines']").value;
 
     if (width < 5 || width > 30 || height < 5 || height > 30 || numOfMines < 0 || numOfMines > width * height) {
-        alert("올바르지 않은 숫자입니다. \n행과 열 각각 5 ~ 30 로 입력가능합니다.");
+        alert('올바르지 않은 숫자입니다. \n행과 열 각각 5 ~ 30 로 입력가능합니다.\n지뢰 수는 맵 크기를 초과할 수 없습니다.');
         window.location.reload();
         return;
     }
@@ -33,33 +31,33 @@ initDom.addEventListener('submit', function(e) {
 
 });
 
-
 function initFormDisplayChange() {
     if (initFormShow) {
         initFormShow = false;
-        initDom.style.display = "none";
-        restartDom.style.display = "inline-block";
-        remapDom.style.display = "initial";
-        displayBarDom.style.display = "flex"
+        initDom.style.display = 'none';
+        restartDom.style.display = 'inline-block';
+        remapDom.style.display = 'initial';
+        displayBarDom.style.display = 'flex';
     } else {
         initFormShow = true;
-        initDom.style.display = "initial";
-        restartDom.style.display = "none";
-        remapDom.style.display = "none";
-        displayBarDom.style.display = "none"
+        initDom.style.display = 'initial';
+        restartDom.style.display = 'none';
+        remapDom.style.display = 'none';
+        displayBarDom.style.display = 'none';
     }
 }
 
 function Game(width, height, numOfMines) {
-    const gameBoard = document.getElementById('gameBoard');
-    gameBoard.style.display = "inline-block";
+
+    const gameBoardDom = document.getElementById('gameBoard');
+    gameBoardDom.style.display = 'inline-block';
 
     let totalPlay;
     let playHour = 0;
     let playSec = 0;
     let playMin = 0;
 
-    totalPlay = ("0" + playMin).slice(-2) + "m : " + ("0" + playSec).slice(-2) + "s";
+    totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
     currTimeDom.textContent = totalPlay;
 
     const rows = [];
@@ -76,9 +74,9 @@ function Game(width, height, numOfMines) {
         }
 
         if (playHour > 0) {
-            totalPlay = ("0" + playHour).slice(-2) + "h : " + totalPlay;
+            totalPlay = ('0' + playHour).slice(-2) + 'h : ' + totalPlay;
         } else {
-            totalPlay = ("0" + playMin).slice(-2) + "m : " + ("0" + playSec).slice(-2) + "s";
+            totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
         }
 
         currTimeDom.textContent = totalPlay;
@@ -100,14 +98,14 @@ function Game(width, height, numOfMines) {
     function initGame(width, height, numOfMines) {
 
         const mineSet = cellMineInit(width * height, numOfMines);
-        let safeNum = width * height - numOfMines;
-        let leftMine = numOfMines;
+        let safeCellNum = width * height - numOfMines;
+        let leftMineNum = numOfMines;
 
-        const cellOpenedDom = document.getElementById('cellOpened');
-        const leftMineDom = document.getElementById('leftMine');
+        const openedCellCountDom = document.getElementById('openedCellCount');
+        const leftMineCountDom = document.getElementById('leftMineCount');
 
-        cellOpenedDom.textContent = "안전한 셀 : " + safeNum;
-        leftMineDom.textContent = "남은 지뢰 : " + leftMine;
+        openedCellCountDom.textContent = '안전한 셀 : ' + safeCellNum;
+        leftMineCountDom.textContent = '남은 지뢰 : ' + leftMineNum;
 
         let toBeOpened = [];
 
@@ -116,7 +114,7 @@ function Game(width, height, numOfMines) {
             rows.push(row);
 
             const rowDom = document.createElement('div');
-            gameBoard.appendChild(rowDom);
+            gameBoardDom.appendChild(rowDom);
             rowDom.className = 'row';
 
             for (let j = 0; j < width; j++) {
@@ -147,18 +145,18 @@ function Game(width, height, numOfMines) {
 
                     if (cellMineNum === 0) {
                         openAllZero(cell);
-                        cell.dom.style.color = "gray";
+                        cell.dom.style.color = 'gray';
                     }
 
                     cell.clicked = true;
 
-                    safeNum = safeCount();
-                    console.log(safeNum);
-                    if (safeNum <= 0) {
+                    safeCellNum = safeCount();
+
+                    if (safeCellNum <= 0) {
                         setTimeout(() => { return gameOver(true) }, 100);
                     }
 
-                    cellOpenedDom.textContent = "안전한 셀 : " + safeNum;
+                    openedCellCountDom.textContent = '안전한 셀 : ' + safeCellNum;
 
                 });
 
@@ -169,26 +167,26 @@ function Game(width, height, numOfMines) {
                     if (cell.marked) {
                         cell.marked = false;
                         cell.dom.textContent = "";
-                        leftMine++;
+                        leftMineNum++;
                     } else {
                         cell.marked = true;
                         cell.dom.textContent = "🚩";
-                        leftMine--;
+                        leftMineNum--;
                     }
 
-                    leftMineDom.textContent = "남은 지뢰 : " + leftMine;
+                    leftMineCountDom.textContent = '남은 지뢰 : ' + leftMineNum;
                     return;
                 });
 
                 dom.addEventListener('mouseover', function() {
                     if (!cell.clicked) {
-                        cell.dom.style.backgroundColor = "#02FF00";
+                        cell.dom.style.backgroundColor = '#02FF00';
                     }
                 })
 
                 dom.addEventListener('mouseout', function() {
                     if (!cell.clicked) {
-                        cell.dom.style.backgroundColor = "slateblue";
+                        cell.dom.style.backgroundColor = 'slateblue';
                     }
                 })
 
@@ -200,13 +198,13 @@ function Game(width, height, numOfMines) {
         }
 
         function safeCount() {
-            let safeNum = width * height - numOfMines;
+            let safeCellNum = width * height - numOfMines;
             for (let i = 0; i < height; i++) {
                 for (let j = 0; j < width; j++) {
-                    if (rows[i][j].clicked == true) safeNum--;
+                    if (rows[i][j].clicked === true) safeCellNum--;
                 }
             }
-            return safeNum;
+            return safeCellNum;
         }
 
         async function openAllZero(startCell) {
@@ -218,6 +216,7 @@ function Game(width, height, numOfMines) {
     }
 
     initGame(width, height, numOfMines);
+
 
 
 
@@ -245,16 +244,15 @@ function Game(width, height, numOfMines) {
             clearInterval(timeStart);
         } else {
             alert('Baaaaaannnnnng~~ \nR E G A M E!');
-            // window.location.reload();
             restartGame();
         }
     }
 
     function restartGame() {
-        gameBoard.remove();
+        gameBoardDom.remove();
 
         const dom = document.createElement('div');
-        dom.setAttribute("id", "gameBoard");
+        dom.setAttribute('id', 'gameBoard');
 
         const fullFrameDom = document.getElementById('fullFrame');
         fullFrameDom.appendChild(dom);
@@ -263,6 +261,6 @@ function Game(width, height, numOfMines) {
         Game(width, height, numOfMines);
     }
 
-    restartDom.addEventListener("click", restartGame);
+    restartDom.addEventListener('click', restartGame);
 
 }
