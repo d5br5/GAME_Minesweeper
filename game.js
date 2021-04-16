@@ -6,15 +6,10 @@ const displayBarDom = document.getElementById('displayBar');
 const currTimeDom = document.getElementById('currTime');
 
 let initFormShow = true;
-
-let width;
-let height;
-let numOfMines;
+let width, height, numOfMines;
 
 initDom.addEventListener('submit', function(e) {
-
     e.preventDefault();
-
     width = initDom.querySelector("[name='col'").value;
     height = initDom.querySelector("[name='row']").value;
     numOfMines = initDom.querySelector("[name='numOfMines']").value;
@@ -26,9 +21,7 @@ initDom.addEventListener('submit', function(e) {
     }
 
     initFormDisplayChange();
-
     Game(width, height, numOfMines);
-
 });
 
 function initFormDisplayChange() {
@@ -53,9 +46,7 @@ function Game(width, height, numOfMines) {
     gameBoardDom.style.display = 'inline-block';
 
     let totalPlay;
-    let playHour = 0;
-    let playSec = 0;
-    let playMin = 0;
+    let playHour = playSec = playMin = 0;
 
     totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
     currTimeDom.textContent = totalPlay;
@@ -72,28 +63,15 @@ function Game(width, height, numOfMines) {
             playMin = 0;
             playHour++;
         }
-
         if (playHour > 0) {
             totalPlay = ('0' + playHour).slice(-2) + 'h : ' + totalPlay;
         } else {
             totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
         }
-
         currTimeDom.textContent = totalPlay;
     }, 1000);
 
-    function cellMineInit(mapSize, numOfMines) {
-        let mineAlloc = [];
-        for (let i = 0; i < numOfMines; i++) {
-            let num = Math.floor(Math.random() * mapSize);
-            if (!mineAlloc.includes(num)) {
-                mineAlloc.push(num);
-            } else {
-                i--;
-            }
-        }
-        return mineAlloc;
-    }
+    initGame(width, height, numOfMines);
 
     function initGame(width, height, numOfMines) {
 
@@ -215,7 +193,18 @@ function Game(width, height, numOfMines) {
         }
     }
 
-    initGame(width, height, numOfMines);
+    function cellMineInit(mapSize, numOfMines) {
+        let mineAlloc = [];
+        for (let i = 0; i < numOfMines; i++) {
+            let num = Math.floor(Math.random() * mapSize);
+            if (!mineAlloc.includes(num)) {
+                mineAlloc.push(num);
+            } else {
+                i--;
+            }
+        }
+        return mineAlloc;
+    }
 
 
 
