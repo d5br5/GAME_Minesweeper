@@ -7,6 +7,7 @@ const currTimeDom = document.getElementById('currTime');
 
 let initFormShow = true;
 let width, height, numOfMines;
+let rows = [];
 
 initDom.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -51,8 +52,6 @@ function Game() {
     totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
     currTimeDom.textContent = totalPlay;
 
-    const rows = [];
-
     const timeStart = setInterval(() => {
         playSec++;
         if (playSec >= 60) {
@@ -90,7 +89,6 @@ function Game() {
         for (let i = 0; i < height; i++) {
             const row = [];
             rows.push(row);
-
             const rowDom = document.createElement('div');
             gameBoardDom.appendChild(rowDom);
             rowDom.className = 'row';
@@ -109,6 +107,11 @@ function Game() {
                     marked: false,
                     isMine: false
                 }
+
+                if (mineSet.includes(i * width + j)) {
+                    cell.isMine = true;
+                }
+                row.push(cell);
 
                 dom.addEventListener('click', function() { //cell left click, open or die
                     if (cell.clicked || cell.marked) return;
@@ -168,14 +171,8 @@ function Game() {
                     }
                 })
 
-                if (mineSet.includes(i * width + j)) {
-                    cell.isMine = true;
-                }
-                row.push(cell);
             }
         }
-
-
 
         async function openAllZero(startCell) {
             getNeighbors(startCell).forEach(item => { if (item.clicked === false) toBeOpened.push(item) });
