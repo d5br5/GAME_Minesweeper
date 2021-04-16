@@ -42,35 +42,17 @@ function initFormDisplayChange() {
 }
 
 function Game() {
-
     const gameBoardDom = document.getElementById('gameBoard');
     gameBoardDom.style.display = 'inline-block';
 
-    let totalPlay;
     let playHour = playSec = playMin = 0;
+    let timeStart;
 
-    totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
-    currTimeDom.textContent = totalPlay;
-
-    const timeStart = setInterval(() => {
-        playSec++;
-        if (playSec >= 60) {
-            playSec = 0;
-            playMin++;
-        }
-        if (playMin >= 60) {
-            playMin = 0;
-            playHour++;
-        }
-        if (playHour > 0) {
-            totalPlay = ('0' + playHour).slice(-2) + 'h : ' + totalPlay;
-        } else {
-            totalPlay = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
-        }
-        currTimeDom.textContent = totalPlay;
-    }, 1000);
+    currTimeDom.textContent = getTotalPlayTime();
+    restartDom.addEventListener('click', resetGame);
 
     initGame();
+    timeStart = setInterval(timeCountUp, 1000);
 
     function initGame() {
 
@@ -80,7 +62,6 @@ function Game() {
 
         const openedCellCountDom = document.getElementById('openedCellCount');
         const leftMineCountDom = document.getElementById('leftMineCount');
-
         openedCellCountDom.textContent = '안전한 셀 : ' + safeCellNum;
         leftMineCountDom.textContent = '남은 지뢰 : ' + leftMineNum;
 
@@ -92,13 +73,10 @@ function Game() {
             const rowDom = document.createElement('div');
             gameBoardDom.appendChild(rowDom);
             rowDom.className = 'row';
-
             for (let j = 0; j < width; j++) {
-
                 const dom = document.createElement('div');
                 dom.className = 'cell';
                 rowDom.appendChild(dom);
-
                 const cell = {
                     dom,
                     x: j,
@@ -107,10 +85,7 @@ function Game() {
                     marked: false,
                     isMine: false
                 }
-
-                if (mineSet.includes(i * width + j)) {
-                    cell.isMine = true;
-                }
+                if (mineSet.includes(i * width + j)) { cell.isMine = true; }
                 row.push(cell);
 
                 dom.addEventListener('click', function() { //cell left click, open or die
@@ -118,7 +93,6 @@ function Game() {
                     if (cell.isMine) return gameOver(false);
 
                     const neighbors = getNeighbors(cell);
-
                     let cellMineNum = neighbors.filter(neighbor => neighbor.isMine === true).length;
 
                     cell.dom.textContent = cellMineNum;
@@ -170,7 +144,6 @@ function Game() {
                         cell.dom.style.backgroundColor = 'slateblue';
                     }
                 })
-
             }
         }
 
@@ -180,6 +153,25 @@ function Game() {
                 await toBeOpened.pop().dom.click();
             }
         }
+    }
+
+    function timeCountUp() {
+        playSec++;
+        if (playSec >= 60) {
+            playSec = 0;
+            playMin++;
+        }
+        if (playMin >= 60) {
+            playMin = 0;
+            playHour++;
+        }
+        currTimeDom.textContent = getTotalPlayTime();
+    }
+
+    function getTotalPlayTime() {
+        let totalPlayTime = ('0' + playMin).slice(-2) + 'm : ' + ('0' + playSec).slice(-2) + 's';
+        if (playHour > 0) { totalPlayTime = ('0' + playHour).slice(-2) + 'h : ' + totalPlayTime; }
+        return totalPlayTime;
     }
 
     function cellMineInit(mapSize, numOfMines) {
@@ -208,18 +200,14 @@ function Game() {
     function getNeighbors(cell) {
         const x = cell.x;
         const y = cell.y;
-
         const neighbors = [];
-
         for (let i = Math.max(0, y - 1); i <= Math.min(height - 1, y + 1); i++) {
             for (let j = Math.max(0, x - 1); j <= Math.min(width - 1, x + 1); j++) {
                 if (x === j && y === i) continue;
                 neighbors.push(rows[i][j]);
             }
         }
-
         return neighbors;
-
     }
 
     function gameOver(isWin) {
@@ -229,23 +217,20 @@ function Game() {
             clearInterval(timeStart);
         } else {
             alert('Baaaaaannnnnng~~ \nR E G A M E!');
-            restartGame();
+            resetGame();
         }
     }
 
-    function restartGame() {
-        gameBoardDom.remove();
-
-        const dom = document.createElement('div');
-        dom.setAttribute('id', 'gameBoard');
-
-        const fullFrameDom = document.getElementById('fullFrame');
-        fullFrameDom.appendChild(dom);
-
+    function resetGame() {
+        rows = [];
+        for (let i = 0; i < height; i++) {
+            row = document.querySelector('.row');
+            gameBoardDom.removeChild(row);
+        }
         clearInterval(timeStart);
-        Game();
+        playHour = playSec = playMin = 0;
+        currTimeDom.textContent = getTotalPlayTime();
+        timeStart = setInterval(timeCountUp, 1000);
+        initGame();
     }
-
-    restartDom.addEventListener('click', restartGame);
-
 }
