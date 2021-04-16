@@ -21,7 +21,7 @@ initDom.addEventListener('submit', function(e) {
     }
 
     initFormDisplayChange();
-    Game(width, height, numOfMines);
+    Game();
 });
 
 function initFormDisplayChange() {
@@ -40,7 +40,7 @@ function initFormDisplayChange() {
     }
 }
 
-function Game(width, height, numOfMines) {
+function Game() {
 
     const gameBoardDom = document.getElementById('gameBoard');
     gameBoardDom.style.display = 'inline-block';
@@ -71,9 +71,9 @@ function Game(width, height, numOfMines) {
         currTimeDom.textContent = totalPlay;
     }, 1000);
 
-    initGame(width, height, numOfMines);
+    initGame();
 
-    function initGame(width, height, numOfMines) {
+    function initGame() {
 
         const mineSet = cellMineInit(width * height, numOfMines);
         let safeCellNum = width * height - numOfMines;
@@ -175,15 +175,7 @@ function Game(width, height, numOfMines) {
             }
         }
 
-        function safeCount() {
-            let safeCellNum = width * height - numOfMines;
-            for (let i = 0; i < height; i++) {
-                for (let j = 0; j < width; j++) {
-                    if (rows[i][j].clicked === true) safeCellNum--;
-                }
-            }
-            return safeCellNum;
-        }
+
 
         async function openAllZero(startCell) {
             getNeighbors(startCell).forEach(item => { if (item.clicked === false) toBeOpened.push(item) });
@@ -206,8 +198,15 @@ function Game(width, height, numOfMines) {
         return mineAlloc;
     }
 
-
-
+    function safeCount() {
+        let safeCellNum = width * height - numOfMines;
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                if (rows[i][j].clicked === true) safeCellNum--;
+            }
+        }
+        return safeCellNum;
+    }
 
     function getNeighbors(cell) {
         const x = cell.x;
@@ -247,7 +246,7 @@ function Game(width, height, numOfMines) {
         fullFrameDom.appendChild(dom);
 
         clearInterval(timeStart);
-        Game(width, height, numOfMines);
+        Game();
     }
 
     restartDom.addEventListener('click', restartGame);
