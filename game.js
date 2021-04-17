@@ -73,6 +73,7 @@ function Game() {
             const rowDom = document.createElement('div');
             gameBoardDom.appendChild(rowDom);
             rowDom.className = 'row';
+
             for (let j = 0; j < width; j++) {
                 const dom = document.createElement('div');
                 dom.className = 'cell';
