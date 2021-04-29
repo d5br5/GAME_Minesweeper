@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./style.css" rel="stylesheet">
+</head>
+
+
+<body>
+<div id="fullFrame">
+    <h1>&#128163; MineSweeper &#128163;</h1>
+    <form id="initForm">
+        <div>
+            <label>
+                높 이 : <input type="number" class="formInput" name="row">
+            </label>
+        </div>
+        <div>
+            <label>
+                너 비 : <input type="number" class="formInput" name="col">
+            </label>
+        </div>
+        <div>
+            <label>
+                지 뢰 : <input type="number" class="formInput" name="numOfMines">
+            </label>
+        </div>
+        <input type="submit" value="Start">
+    </form>
+
+    <input type="button" value="restart" id='restart'>
+
+    <input type="button" value="remap" id="remap" onClick="window.location.reload()">
+
+    <div id="displayBar">
+        <div id="playTimer">
+            <div id="timeTitle">
+                <B>PLAY TIME</B>
+            </div>
+            <div id="currTime"></div>
+        </div>
+        <div id="mineCounter">
+            <div id="openedCellCount"></div>
+            <div id="leftMineCount"></div>
+        </div>
+    </div>
+
+    <div id="gameBoard"></div>
+
+</div>
+
+</body>
+<script src="./game.js"></script>
+
+</html>
