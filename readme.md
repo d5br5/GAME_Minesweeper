@@ -2,8 +2,9 @@
 
 윈도우에서 기본으로 제공됬던 지뢰찾기를 웹으로 구현해본다.
 
-## 구현 완료
-https://d5br5.github.io/minesweeper/
+## Implement
+- html, css, js
+- [MineSweeper](https://d5br5.github.io/minesweeper/)
 
 ## 기능 명세
 
@@ -15,9 +16,3 @@ https://d5br5.github.io/minesweeper/
 * 지뢰가 없는 셀을 다 열었을 시, 게임이 종료된다.
 * 맵의 위쪽 상단은 남은지뢰 개수, 리스타트 버튼, 지속된 시간을 각각 보여준다.
 * 리스타트 버튼을 누를 시 같은 맵 크기, 같은 지뢰 개수로 맵을 재생성한다. (시간은 초기화한다)
-
-## coding style guide
-* index.html, game.js, styles.css(선택) 로 프로젝트는 구성이 되어야 한다.
-* spaces indenting를 기본으로 한다.
-* 변수명은 camelCase 를 기본으로 한다.
-* 외부 플러그인이나 라이브러리는 사용하지 않는다.
