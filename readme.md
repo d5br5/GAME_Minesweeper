@@ -4,7 +4,7 @@
 
 ## Implement
 - html, css, js
-- [Link : MineSweeper](https://d5br5.github.io/minesweeper/)
+- [Link : MineSweeper](https://d5br5.github.io/GAME_Minesweeper/)
 
 ## 기능 명세
 
