@@ -1,10 +1,8 @@
 # 지뢰찾기 Minesweeper
 
-<p align="center"><img src="./readmeImg/start.jpg" height="400"/><img src="./readmeImg/play.jpg" height="400"/></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/40906871/143425700-6a551bc4-0e5d-4097-86a0-44ebee6c95a7.JPG" height="400"/><img src="https://user-images.githubusercontent.com/40906871/143425699-118edb42-cf06-4813-9bc7-9bdd492f8bca.JPG" height="400"/></p>
 
 ## About the Project
-
----
 
 ### Purpose
 
@@ -25,14 +23,13 @@
 
 ## Implements & Functions
 
----
 
 ### Main
 
 - 최초 맵의 크기(x, y)와 지뢰의 개수(z)를 입력받는다. (5<= x,y <= 30, 0 <= z <= x \* y)
 - 입력 받은 값에 맞게 지도가 생성된다.
 
-<p align="center"><img src="./readmeImg/main.jpg" height="200"/></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/40906871/143425705-06a8e417-e950-4767-81fb-63b97b637794.JPG" height="200"/></p>
 
 ### start & play
 
@@ -46,13 +43,15 @@
 - game clear
   - 지뢰가 없는 셀이 전부 오픈될 경우, 게임이 종료된다.
   - play time과 함께 축하 문구가 alert 된다.
-  <p align="center"><img src="./readmeImg/gameclear.jpg" height="120"/></p>
+
+<p align="center"><img src="https://user-images.githubusercontent.com/40906871/143425695-ef5d0433-9eb8-4fae-91dd-b99604306f98.JPG" height="120"/></p>
+  
 - game over
 
   - 지뢰 셀을 오픈할 경우, 게임이 종료된다.
   - game over되었다는 내용의 문구가 alert 된다.
 
-  <p align="center">![gameover](https://user-images.githubusercontent.com/40906871/143425693-8348b922-c9a2-4773-acbb-812854b9ac2f.JPG){: height="120"}</p>
+  <p align="center"><img src="https://user-images.githubusercontent.com/40906871/143425693-8348b922-c9a2-4773-acbb-812854b9ac2f.JPG" height="120"/></p>
 
 - cell mouse hover
   - 현재 마우스가 위치한 칸이 미클릭 셀일 경우, 초록색으로 표시된다.
@@ -67,4 +66,4 @@
 - restart
   - 같은 맵 크기, 같은 지뢰 개수로 맵을 재생성한다. 시간은 초기화한다.
 
-<p align="center"><img src="./readmeImg/start.jpg" height="400"/><img src="./readmeImg/play.jpg" height="400"/></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/40906871/143425700-6a551bc4-0e5d-4097-86a0-44ebee6c95a7.JPG" height="400"/><img src="https://user-images.githubusercontent.com/40906871/143425699-118edb42-cf06-4813-9bc7-9bdd492f8bca.JPG" height="400"/></p>
