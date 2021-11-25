@@ -21,7 +21,7 @@
 - CSS
 - Javascript
 
-## Implements & Functions
+## Details
 
 
 ### Main
