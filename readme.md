@@ -52,7 +52,7 @@
   - 지뢰 셀을 오픈할 경우, 게임이 종료된다.
   - game over되었다는 내용의 문구가 alert 된다.
 
-  <p align="center"><img src="./readmeImg/gameover.jpg" height="120"/></p>
+  <p align="center">![gameover](https://user-images.githubusercontent.com/40906871/143425693-8348b922-c9a2-4773-acbb-812854b9ac2f.JPG){: height="120"}</p>
 
 - cell mouse hover
   - 현재 마우스가 위치한 칸이 미클릭 셀일 경우, 초록색으로 표시된다.
